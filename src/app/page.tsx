@@ -3,14 +3,33 @@
 import React from 'react'
 
 import { Sidebar } from '@/components/Sidebar'
+import { Header } from '@/components/Header'
+import { ChatArea } from '@/components/ChatArea'
+
+import { Chat } from '@/types/Chat'
 
 export default function Home() {
 
   const [sidebarOpened, setSidebarOpened] = React.useState(false)
+  const [chatActive, setChatActive] = React.useState<Chat>({
+    id: '123',
+    title: 'Test chat area',
+    messages: [
+      {
+        id: '994',
+        author: 'me',
+        body: 'Opa, tudo bem?'
+      },
+      {
+        id: '995',
+        author: 'ai',
+        body: 'Tudo ótimo, em que posso te ajudar?'
+      },
+    ]
+  })
 
-  const closeSidebar = () => {
-    setSidebarOpened(false)
-  }
+  const openSidebar = () => setSidebarOpened(true)
+  const closeSidebar = () => setSidebarOpened(false)
 
   const handleClearConversations = () => {}
 
@@ -27,7 +46,17 @@ export default function Home() {
         <div className=''>...</div>
       </Sidebar>
       <section className='flex flex-col w-full'>
-        <button onClick={() => setSidebarOpened(true)}>Open Sidebar</button>
+
+        <Header
+          openSidebarClick={openSidebar}
+          title={`Title Text`}
+          newChatClick={handleNewChat}
+        />
+
+        <ChatArea
+          chat={chatActive}
+        />
+
       </section>
     </main>
   )
