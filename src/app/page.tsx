@@ -24,7 +24,7 @@ export default function Home() {
         onClear={handleClearConversations}
         onNewChat={handleNewChat}
       >
-        <div>...</div>
+        <div className=''>...</div>
       </Sidebar>
       <section className='flex flex-col w-full'>
         <button onClick={() => setSidebarOpened(true)}>Open Sidebar</button>
