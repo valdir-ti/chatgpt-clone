@@ -7,10 +7,12 @@ import { Header } from '@/components/Header'
 import { ChatArea } from '@/components/ChatArea'
 
 import { Chat } from '@/types/Chat'
+import { Footer } from '@/components/Footer'
 
 export default function Home() {
 
   const [sidebarOpened, setSidebarOpened] = React.useState(false)
+  const [AiLoading, setAiLoading] = React.useState(false)
   const [chatActive, setChatActive] = React.useState<Chat>({
     id: '123',
     title: 'Test chat area',
@@ -35,6 +37,8 @@ export default function Home() {
 
   const handleNewChat = () => {}
 
+  const handleSendMessage = () => {}
+
   return (
     <main className="flex min-h-screen bg-gpt-gray">
       <Sidebar
@@ -55,6 +59,11 @@ export default function Home() {
 
         <ChatArea
           chat={chatActive}
+        />
+
+        <Footer
+          disabled={AiLoading}
+          onSendMessage={handleSendMessage}
         />
 
       </section>
