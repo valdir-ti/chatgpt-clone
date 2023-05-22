@@ -9,6 +9,7 @@ import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 
 import { Chat } from '@/types/Chat'
+import { SidebarChatButton } from '@/components/SidebarChatButton'
 
 export default function Home() {
 
@@ -93,6 +94,32 @@ export default function Home() {
     setAiLoading(true)
   }
 
+  const handleSelectChat = (id: string) => {
+    if(AiLoading) return
+
+    let item = chatList.find(item => item.id === id)
+    if(item) setChatActiveId(item.id)
+
+    closeSidebar()
+  }
+
+  const handleDeleteChat = (id: string) => {
+    let chatListClone = [...chatList]
+    let chatIndex = chatListClone.findIndex(item => item.id === id)
+    chatListClone.splice(chatIndex, 1)
+    setChatList(chatListClone)
+    setChatActiveId('')
+  }
+
+  const handleEditChat = (id: string, newTitle: string) => {
+    if(newTitle) {
+      let chatListClone = [...chatList]
+      let chatIndex = chatListClone.findIndex(item => item.id === id)
+      chatListClone[chatIndex].title = newTitle
+      setChatList(chatListClone)
+    }
+  }
+
   return (
     <main className="flex min-h-screen bg-gpt-gray">
       <Sidebar
@@ -101,13 +128,22 @@ export default function Home() {
         onClear={handleClearConversations}
         onNewChat={handleNewChat}
       >
-        <div className=''>...</div>
+        {chatList.map(item => (
+          <SidebarChatButton
+            key={item.id}
+            chatItem={item}
+            active={item.id === chatActiveId}
+            onClick={handleSelectChat}
+            onDelete={handleDeleteChat}
+            onEdit={handleEditChat}
+          />
+        ))}
       </Sidebar>
       <section className='flex flex-col w-full'>
 
         <Header
           openSidebarClick={openSidebar}
-          title={`Title Text`}
+          title={chatActive ? chatActive.title : 'Nova conversa'}
           newChatClick={handleNewChat}
         />
 
