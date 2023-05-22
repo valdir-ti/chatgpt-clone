@@ -1,43 +1,97 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
+import { ChatArea } from '@/components/ChatArea'
 import { Sidebar } from '@/components/Sidebar'
 import { Header } from '@/components/Header'
-import { ChatArea } from '@/components/ChatArea'
+import { Footer } from '@/components/Footer'
 
 import { Chat } from '@/types/Chat'
-import { Footer } from '@/components/Footer'
 
 export default function Home() {
 
-  const [sidebarOpened, setSidebarOpened] = React.useState(false)
-  const [AiLoading, setAiLoading] = React.useState(false)
-  const [chatActive, setChatActive] = React.useState<Chat>({
-    id: '123',
-    title: 'Test chat area',
-    messages: [
-      {
-        id: '994',
-        author: 'me',
-        body: 'Opa, tudo bem?'
-      },
-      {
-        id: '995',
-        author: 'ai',
-        body: 'Tudo ótimo, em que posso te ajudar?'
-      },
-    ]
-  })
+  const [sidebarOpened, setSidebarOpened] = useState(false)
+  const [AiLoading, setAiLoading] = useState(false)
+  const [chatActive, setChatActive] = useState<Chat>()
+  const [chatList, setChatList] = useState<Chat[]>([])
+  const [chatActiveId, setChatActiveId] = useState<string>('')
+
+  useEffect(() => {
+    setChatActive(chatList.find(item => item.id === chatActiveId))
+  }, [chatActiveId, chatList])
+
+  useEffect(() => {
+    if(AiLoading) getAiResponse()
+  }, [AiLoading])
+
+  const getAiResponse = () => {
+    setTimeout(() => {
+      let chatListClone = [...chatList]
+      let chatIndex = chatListClone.findIndex(item => item.id === chatActiveId)
+      if(chatIndex > -1) {
+        chatListClone[chatIndex].messages.push({
+          id: uuidv4(),
+          author: 'ai',
+          body: 'Aqui vai a resposta da AI :)'
+        })
+      }
+      setChatList(chatListClone)
+      setAiLoading(false)
+    }, 2000)
+  }
 
   const openSidebar = () => setSidebarOpened(true)
   const closeSidebar = () => setSidebarOpened(false)
 
-  const handleClearConversations = () => {}
+  const handleClearConversations = () => {
+    if(AiLoading) return
 
-  const handleNewChat = () => {}
+    setChatActiveId('')
+    setChatList([])
+  }
 
-  const handleSendMessage = () => {}
+  const handleNewChat = () => {
+    if(AiLoading) return
+
+    setChatActiveId('')
+    closeSidebar()
+  }
+
+  const handleSendMessage = (message: string) => {
+    if(!chatActiveId) {
+      //Create new chat
+      let newChatId = uuidv4()
+      setChatList([{
+        id: newChatId,
+        title: message,
+        messages: [
+          {
+            id: uuidv4(),
+            author: 'me',
+            body: message
+          }
+        ]
+      }, ...chatList])
+
+      setChatActiveId(newChatId)
+
+    } else {
+      //Update existing chat
+      let chatListClone = [...chatList]
+      let chatIndex = chatListClone.findIndex(item => item.id === chatActiveId)
+      chatListClone[chatIndex].messages.push({
+        id: uuidv4(),
+        author: 'me',
+        body: message
+      })
+
+      setChatList(chatListClone)
+    }
+
+    setAiLoading(true)
+  }
 
   return (
     <main className="flex min-h-screen bg-gpt-gray">
@@ -59,6 +113,7 @@ export default function Home() {
 
         <ChatArea
           chat={chatActive}
+          loading={AiLoading}
         />
 
         <Footer
