@@ -24,12 +24,12 @@ export const Sidebar = ({ open, onClose, onClear, onNewChat, children}: SidebarP
             <div className="flex flex-col w-64 p-2 bg-gray-900">
 
                 <div onClick={onNewChat} className="flex items-center p-3 rounded-md text-sm cursor-pointer border border-white/20 hover:bg-gray-500/20">
-                        <IconAdd height={16} width={16} className="mr-3"/>
-                        Nova Conversa
+                    <IconAdd height={16} width={16} className="mr-3"/>
+                    Nova Conversa
                 </div>
 
                 <nav className="flex-1 pt-2 overflow-y-auto">
-                        {children}
+                    {children}
                 </nav>
 
                 <div className="border-t border-gray-700 pt-2">

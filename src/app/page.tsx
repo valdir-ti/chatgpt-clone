@@ -121,7 +121,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen bg-gpt-gray">
+    <main className="flex min-h-screen bg-gpt-gray text-white">
       <Sidebar
         open={sidebarOpened}
         onClose={closeSidebar}

@@ -34,7 +34,7 @@ export const ChatMessageInput = ({ disabled, onSend }: ChatMessageInputProps) =>
     }
 
     return (
-        <div className={`flex border border-gray-800/50 bg-gpt-lightgray p-2 rounded-md ${disabled && 'opacity-50'}`}>
+        <div className={`flex border border-gray-800/50 bg-gpt-lightgray p-2 rounded-md text-white ${disabled && 'opacity-50'}`}>
 
             <textarea
                 ref={textEl}
