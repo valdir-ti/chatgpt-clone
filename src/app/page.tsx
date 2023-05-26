@@ -11,6 +11,8 @@ import { Footer } from '@/components/Footer'
 import { Chat } from '@/types/Chat'
 import { SidebarChatButton } from '@/components/SidebarChatButton'
 
+import { openai } from '@/utils/openai'
+
 export default function Home() {
 
   const [sidebarOpened, setSidebarOpened] = useState(false)
@@ -27,20 +29,24 @@ export default function Home() {
     if(AiLoading) getAiResponse()
   }, [AiLoading])
 
-  const getAiResponse = () => {
-    setTimeout(() => {
+  const getAiResponse = async () => {
       let chatListClone = [...chatList]
       let chatIndex = chatListClone.findIndex(item => item.id === chatActiveId)
       if(chatIndex > -1) {
-        chatListClone[chatIndex].messages.push({
-          id: uuidv4(),
-          author: 'ai',
-          body: 'Aqui vai a resposta da AI :)'
-        })
+
+        const translated = openai.translateMessages(chatListClone[chatIndex].messages)
+        const response = await openai.generate(translated)
+
+        if(response) {
+          chatListClone[chatIndex].messages.push({
+            id: uuidv4(),
+            author: 'ai',
+            body: response
+          })
+        }
       }
       setChatList(chatListClone)
       setAiLoading(false)
-    }, 2000)
   }
 
   const openSidebar = () => setSidebarOpened(true)
