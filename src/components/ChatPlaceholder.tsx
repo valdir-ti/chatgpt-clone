@@ -6,8 +6,8 @@ import IconExclamationTriangle from "./icons/IconExclamationTriangle"
 
 export const ChatPlaceholder = () => {
   return (
-    <div className="m-5 mt-52">
-        <h3 className="text-4xl font-bold text-center my-16 text-white">ChatGPT Clone</h3>
+    <div className="m-5 mt-0 md:mt-52">
+        <h3 className="text-4xl font-bold text-center my-10 text-white">ChatGPT Clone</h3>
 
         <div className="flex flex-col md:flex-row gap-5 m-auto mb-8 md:max-w-4xl">
 
